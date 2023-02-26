@@ -2,4 +2,4 @@
 
 ## 2023-02-25
 ### Added
-- Get IDs from current table
+- Get Table IDs
