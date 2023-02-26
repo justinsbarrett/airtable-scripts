@@ -19,7 +19,7 @@
  * 
  */
 const settings = input.config({
-    title: `Get IDs from Active Table`,
+    title: `Get Table IDs`,
     description: "v1.0.3",
     items: [
         input.config.select("includeFields", {
