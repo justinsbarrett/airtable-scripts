@@ -98,8 +98,8 @@ const main = async () => {
     if (settings.mode === "Custom extension")
         output.text("import { base } from '@airtable/blocks'")
     output.text(`const TB = {
-${indent(1)}${newTableName}: ${TABLE_EXTENSION_PRE}"${table.id}"${TABLE_EXTENSION_POST}
-},`)
+${indent(1)}${newTableName}: ${TABLE_EXTENSION_PRE}"${table.id}"${TABLE_EXTENSION_POST},
+}`)
 
     if (fieldIds.length) {
         fieldIds.sort(sortIds)
