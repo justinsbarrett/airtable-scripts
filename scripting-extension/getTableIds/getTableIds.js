@@ -110,7 +110,7 @@ ${indent(1)}},
 }`)
     }
 
-    if (viewIds.length) {
+    if (viewIds.length && settings.mode === "Script") {
         viewIds.sort(sortIds)
         output.text(`const VW = {
 ${indent(1)}${newTableName}: {
