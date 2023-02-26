@@ -1,7 +1,8 @@
 /**
- * Get IDs from Active Table
+ * Get Table IDs
  * 
- * Version 1.0.3
+ * Author: Justin Barrett
+ * Version: 1.0.3
  * 
  * Get IDs from base, table, fields, and views
  * Output either for scripts or custom extensions
