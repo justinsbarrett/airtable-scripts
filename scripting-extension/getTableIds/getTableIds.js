@@ -89,10 +89,10 @@ const main = async () => {
     const FIELD_EXTENSION_PRE = settings.mode === "Script" ? "" : `TB.${newTableName}.getFieldIfExists(`
     const FIELD_EXTENSION_POST = settings.mode === "Script" ? "" : ")"
     const fieldIds = includeFields === "Yes"
-        ? table.fields.map(item => `${convertName(item.name)}: ${FIELD_EXTENSION_PRE}"${item.id}"${FIELD_EXTENSION_POST}`)
+        ? table.fields.map(item => `${convertName(item.name)}: ${FIELD_EXTENSION_PRE}"${item.id}"${FIELD_EXTENSION_POST},`)
         : []
     const viewIds = includeViews === "Yes"
-        ? table.views.map(item => `${convertName(item.name)}: "${item.id}"`)
+        ? table.views.map(item => `${convertName(item.name)}: "${item.id}",`)
         : []
 
     if (settings.mode === "Custom extension")
@@ -105,7 +105,7 @@ ${indent(1)}${newTableName}: ${TABLE_EXTENSION_PRE}"${table.id}"${TABLE_EXTENSIO
         fieldIds.sort(sortIds)
         output.text(`const FL = {
 ${indent(1)}${newTableName}: {
-${indent(2)}${fieldIds.join(`,\n${indent(2)}`)}
+${indent(2)}${fieldIds.join(`\n${indent(2)}`)}
 ${indent(1)}},
 }`)
     }
@@ -114,15 +114,17 @@ ${indent(1)}},
         viewIds.sort(sortIds)
         output.text(`const VW = {
 ${indent(1)}${newTableName}: {
-${indent(2)}${viewIds.join(`,\n${indent(2)}`)}
+${indent(2)}${viewIds.join(`\n${indent(2)}`)}
 ${indent(1)}},
 }`)
     }
 
-    output.text([
-        `const ${newTableName}Table = base.getTable(TB.${newTableName})`,
-        `const ${newTableName}Query = await ${newTableName}Table.selectRecordsAsync({fields: Object.values(FL.${newTableName})})`
-    ].join("\n"))
+    if (settings.mode === "Script") {
+        output.text([
+            `const ${newTableName}Table = base.getTable(TB.${newTableName})`,
+            `const ${newTableName}Query = await ${newTableName}Table.selectRecordsAsync({fields: Object.values(FL.${newTableName})})`
+        ].join("\n"))
+    }
 }
 
 await main()
