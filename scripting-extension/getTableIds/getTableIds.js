@@ -1,26 +1,17 @@
 /**
- * Get Table IDs
- * 
+ * Title: Get Table IDs
+ * Version: 1.0.4
+ * License: MIT
  * Author: Justin Barrett
- * Version: 1.0.3
+ * Site: http://www.allaboutthatbase.tips
+ * Support: https://ko-fi.com/allaboutthatbase
+ * Source: https://github.com/justinsbarrett/airtable-scripts/tree/main/scripting-extension/getTableIds
  * 
- * Get IDs from base, table, fields, and views
- * Output either for scripts or custom extensions
- * 
- * Version history:
- * 1.0.0    2022-09-04  Initial tracked version
- *                      Created function for key sorting
- *                      Updated regex to include numbers
- * 1.0.1    2023-02-02  Added table and query variable definition
- * 1.0.2    2023-02-14  Use cursor to detect active table
- *                      Added version number to display
- * 1.0.3    2023-02-24  Added setting for indent size
- *                      Field property names become "unknown" when no alphanumeric characters are in the name
- * 
+ * Description: Get IDs from base, table, fields, and views. Output either for scripts or custom extensions
  */
 const settings = input.config({
-    title: `Get Table IDs`,
-    description: "v1.0.3",
+    title: "Get Table IDs",
+    description: "v1.0.4",
     items: [
         input.config.select("includeFields", {
             label: "Include fields?",
@@ -37,11 +28,15 @@ const settings = input.config({
         input.config.select("indentSize", {
             label: "Indent size (spaces)",
             options: [{value: "2"}, {value: "4"}]
+        }),
+        input.config.select("commentFieldProps", {
+            label: "Include comment lines around field properties?",
+            options: [{value: "Yes"}, {value: "No"}]
         })
     ]
 })
 
-const { includeFields, includeViews, indentSize } = settings
+const { includeFields, includeViews, indentSize, commentFieldProps } = settings
 
 const table = base.getTable(cursor.activeTableId ?? "")
 const indent = (count) => (" ".repeat(Number(indentSize))).repeat(count)
@@ -104,8 +99,8 @@ ${indent(1)}${newTableName}: ${TABLE_EXTENSION_PRE}"${table.id}"${TABLE_EXTENSIO
     if (fieldIds.length) {
         fieldIds.sort(sortIds)
         output.text(`const FL = {
-${indent(1)}${newTableName}: {
-${indent(2)}${fieldIds.join(`\n${indent(2)}`)}
+${indent(1)}${newTableName}: {${commentFieldProps === "Yes" ? "\n" + indent(2) + "/*" : "" }
+${indent(2)}${fieldIds.join(`\n${indent(2)}`)}${commentFieldProps === "Yes" ? "\n" + indent(2) + "*/" : "" }
 ${indent(1)}},
 }`)
     }
